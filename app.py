@@ -59,31 +59,106 @@ st.metric(
     f"{total_mill} mill. kr"
 )
 
-st.sidebar.header("⚙️ Kontrollpanel: Justering av satsar")
+# ============================
+#      SIDEBAR START
+# ============================
 
-bolig_sats = st.sidebar.slider(
-    "Promillesats for bolig (1.9‰ i 2025, justering maks 1 per år)",
-    min_value=0.0,
-    max_value=4.0,
-    step=0.1,
-    value=1.9
+st.sidebar.header("⚙️ Justering av satsar")
+
+# --- Rødt sine foreslåtte verdier ---
+RODT_BOLIG = 2.9
+RODT_NAERING = 5.0
+RODT_BUNN = 1_200_000
+
+# --- Standard når av ---
+STD_BOLIG = 1.9
+STD_NAERING = 4.0
+STD_BUNN = 200_000
+
+# --- Init session states ---
+if "rodt_modus" not in st.session_state:
+    st.session_state.rodt_modus = False
+
+if "bolig_sats" not in st.session_state:
+    st.session_state.bolig_sats = STD_BOLIG
+
+if "naering_sats" not in st.session_state:
+    st.session_state.naering_sats = STD_NAERING
+
+if "bunnfradrag_ny" not in st.session_state:
+    st.session_state.bunnfradrag_ny = STD_BUNN
+
+
+# ---- ON-CLICK FUNKSJON ----
+def toggle_rodt_modus():
+    st.session_state.rodt_modus = not st.session_state.rodt_modus
+    if st.session_state.rodt_modus:
+        st.session_state.bolig_sats = RODT_BOLIG
+        st.session_state.naering_sats = RODT_NAERING
+        st.session_state.bunnfradrag_ny = RODT_BUNN
+    else:
+        st.session_state.bolig_sats = STD_BOLIG
+        st.session_state.naering_sats = STD_NAERING
+        st.session_state.bunnfradrag_ny = STD_BUNN
+
+
+# --- Bestem knappens stil + tekst ---
+aktiv = st.session_state.rodt_modus
+btn_color = "#cc0000" if not aktiv else "#888888"
+btn_text = "🔴 Sett Rødt-modus" if not aktiv else "⚪ Slå av Rødt-modus"
+
+# --- CSS for knappen ---
+st.sidebar.markdown(f"""
+<style>
+.rodt-btn > button {{
+    background-color: {btn_color} !important;
+    color: white !important;
+    font-weight: bold;
+    border-radius: 5px;
+    height: 3em;
+    width: 100%;
+}}
+</style>
+""", unsafe_allow_html=True)
+
+
+# --- KNAPP MED on_click (løser alt) ---
+with st.sidebar:
+    st.button(
+        btn_text,
+        key="rodt_button",
+        on_click=toggle_rodt_modus
+    )
+
+# -----------------------------------
+# Sliderne (alltid synlige)
+# -----------------------------------
+st.sidebar.slider(
+    "Promillesats for bolig (1.9‰ i 2025)",
+    min_value=0.0, max_value=4.0, step=0.1,
+    key="bolig_sats"
 )
 
-naering_sats = st.sidebar.slider(
-    "Promillesats for næring (4.0‰ i 2025, justering maks 1 per år)",
-    min_value=0.0,
-    max_value=7.0,
-    step=0.1,
-    value=4.0
+st.sidebar.slider(
+    "Promillesats for næring (4.0‰ i 2025)",
+    min_value=0.0, max_value=7.0, step=0.1,
+    key="naering_sats"
 )
 
-bunnfradrag_ny = st.sidebar.slider(
+st.sidebar.slider(
     "Botnfrådrag (0–2 000 000)",
-    min_value=0,
-    max_value=2000000,
-    step=100000,
-    value=200000
+    min_value=0, max_value=2_000_000, step=100_000,
+    key="bunnfradrag_ny"
 )
+
+# ============================
+#     OVERFØR SLIDER-VERDIAR
+# ============================
+
+bolig_sats = st.session_state.bolig_sats
+naering_sats = st.session_state.naering_sats
+bunnfradrag_ny = st.session_state.bunnfradrag_ny
+
 
 # --- Ny promillesats basert på type eiendom ---
 df["Promillesats_ny"] = df["Promillesats"]  # start med dagens sats
