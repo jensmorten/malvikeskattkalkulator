@@ -51,7 +51,7 @@ df_utan_fritak = df[df["Fritak"] == "ingen"]
 
 total_skatt_utan_fritak = df_utan_fritak["Skatt"].sum()
 
-st.subheader("💰 Total eigedomsskatt")
+st.subheader("💰 Total eigedomsskatt i 2025")
 
 total_mill = round(total_skatt_utan_fritak / 1_000_000)
 st.metric(
@@ -195,7 +195,7 @@ df["Skatt_ny"] = (
 
 total_skatt_ny = df["Skatt_ny"].sum()
 
-st.subheader("🔮 Ny berekna eigedomsskatt")
+st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000)
 st.metric(
     "Total skatt etter justering",
