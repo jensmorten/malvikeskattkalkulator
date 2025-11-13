@@ -55,7 +55,6 @@ st.subheader("💰 Total eigedomsskatt (2025)")
 
 total_mill = round(total_skatt_utan_fritak / 1_000_000)
 st.metric(
-    "Total skatt etter justering",
     f"{total_mill} mill. kr"
 )
 
@@ -198,7 +197,6 @@ total_skatt_ny = df["Skatt_ny"].sum()
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000)
 st.metric(
-    "Total skatt",
     f"{total_mill} mill. kr"
 )
 
@@ -208,9 +206,9 @@ inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
 inntekt_diff_mill = round(inntekt_diff / 1_000_000)
 
 if inntekt_diff_mill > 0:
-    tekst = f"📈 Endring i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
 elif inntekt_diff < 0:
-    tekst = f"📉 Endring i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
+    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
     
