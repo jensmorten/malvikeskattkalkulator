@@ -292,32 +292,45 @@ for label, takst in [("låg takst (~0.25-percentil)", p25),
 
 st.subheader("📘 Kostnad for typiske eigendomar")
 
-df_sim = pd.DataFrame(rows)
-
 def farge_neg_pos(val):
     try:
-        # Fjern kr og formattering for å lese tallet
         clean = float(val.replace(" kr", "").replace(",", "").replace(" ", ""))
     except:
-        return ""  # dersom ikkje tal
-
+        return ""
     if clean > 0:
         return "background-color: #e6ffe6;"   # grøn
     elif clean < 0:
         return "background-color: #ffe6e6;"   # raud
     return ""
 
+
 df_sim_styled = (
     df_sim
     .style
+    # farge på endring
     .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
+    # generelt utseende
     .set_properties(**{
-        "font-size": "15px",
-        "padding": "6px"
+        "font-size": "16px",     # større skrift
+        "padding": "10px",       # meir luft
+        "text-align": "left"
     })
+    # fet og bakgrunn for header
+    .set_table_styles([
+        {
+            "selector": "th",
+            "props": [
+                ("background-color", "#f0f0f0"),
+                ("font-weight", "bold"),
+                ("font-size", "17px"),
+                ("padding", "12px")
+            ]
+        }
+    ])
 )
 
 st.dataframe(df_sim_styled, hide_index=True, use_container_width=True)
+
 
 
 tiltak = {
