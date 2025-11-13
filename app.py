@@ -239,9 +239,9 @@ debug_cols = [
 #)
 
 
-p25 = 2500000
-p50 = 4000000
-p75 = 5500000
+p25 = 2500000 #df["Takst"].quantile(0.25)
+p50 = 4000000 #df["Takst"].quantile(0.50)
+p75 = 5500000 #df["Takst"].quantile(0.75)
 p99 = 10000000 ###3df["Takst"].quantile(0.985)
 
 
@@ -257,7 +257,7 @@ def to_mill(x):
 
 rows = []
 
-for label, takst in [("lav takst (~0.25-percentil)", p25),
+for label, takst in [("låg takst (~0.25-percentil)", p25),
                      ("median takst (~0.5-percentil)", p50),
                      ("høg takst, (~0.75-percentil)", p75),
                      ("svørt høg takst (~0.99-percentil)", p99)]:
@@ -368,3 +368,25 @@ if inntekt_diff_mill > 0:
 
     st.dataframe(pd.DataFrame(rows_stilling), hide_index=True)
 
+st.sidebar.markdown("""
+<hr>
+<p>
+ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigendomsskatten i Malvik kommune, 
+både for kommunebudsjetet og huseigarar. 
+</p>
+<p>
+Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/nyhet/offentlig-ettersyn-eiendomsskatt-2025">
+offentleg ettersyn, eiendomsskatt 2025 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
+</p>
+<p>
+Moglege feilkjelder: data er henta inn frå eit PDF-dokument lagra på tabellformat, og sjølv om manuell kontroll av data er 
+utført kan slik metode gi enkelte feil. Vidare tar ikkje den forenkla kalkulatoren omsyn til delvis fritak for skatt. 
+</p>
+<p>
+ Ta gjerne kontakt med <a href="mailto:jens.morten.nilsen@gmail.com">jens.morten.nilsen@gmail.com</a> for spørsmål eller kommentarar.  
+</p>
+<p>
+Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil undertreke at kalkulatoren kan brukast av alle, 
+og den reknar like bra utansett som skatten går opp eller ned. 
+</p>
+""", unsafe_allow_html=True)
