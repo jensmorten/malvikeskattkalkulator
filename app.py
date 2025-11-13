@@ -105,7 +105,7 @@ def toggle_rodt_modus():
 # --- Bestem knappens stil + tekst ---
 aktiv = st.session_state.rodt_modus
 btn_color = "#cc0000" if not aktiv else "#888888"
-btn_text = "🔴 Sett Rødt-modus" if not aktiv else "⚪ Slå av Rødt-modus"
+btn_text = "🔴 Sett Raudt-modus" if not aktiv else "⚪ Slå av Raudt-modus"
 
 # --- CSS for knappen ---
 st.sidebar.markdown(f"""
