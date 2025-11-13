@@ -292,6 +292,8 @@ for label, takst in [("låg takst (~0.25-percentil)", p25),
 
 st.subheader("📘 Kostnad for typiske eigendomar")
 
+df_sim = pd.DataFrame(rows)
+
 def farge_neg_pos(val):
     try:
         clean = float(val.replace(" kr", "").replace(",", "").replace(" ", ""))
@@ -330,7 +332,6 @@ df_sim_styled = (
 )
 
 st.dataframe(df_sim_styled, hide_index=True, use_container_width=True)
-
 
 
 tiltak = {
