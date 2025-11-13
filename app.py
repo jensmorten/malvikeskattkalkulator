@@ -299,9 +299,9 @@ def farge_neg_pos(val):
         clean = float(val.replace(" kr", "").replace(",", "").replace(" ", ""))
     except:
         return ""
-    if clean > 0:
+    if clean < 0:
         return "background-color: #e6ffe6;"   # grøn
-    elif clean < 0:
+    elif clean > 0:
         return "background-color: #ffe6e6;"   # raud
     return ""
 
