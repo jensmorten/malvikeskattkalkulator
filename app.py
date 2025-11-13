@@ -208,9 +208,9 @@ inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
 inntekt_diff_mill = round(inntekt_diff / 1_000_000)
 
 if inntekt_diff_mill > 0:
-    tekst = f"📈 Auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
+    tekst = f"📈 Endring i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
 elif inntekt_diff < 0:
-    tekst = f"📉 Kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
+    tekst = f"📉 Endring i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
     
