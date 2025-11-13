@@ -59,7 +59,7 @@ st.metric(
     f"{total_mill} mill. kr"
 )
 
-st.sidebar.header("⚙️ Justering av satsar")
+st.sidebar.header("⚙️ Kontrollpanel: Justering av satsar")
 
 bolig_sats = st.sidebar.slider(
     "Promillesats for bolig (1.9‰ i 2025, justering maks 1 per år)",
