@@ -68,12 +68,12 @@ st.sidebar.header("⚙️ Justering av satsar")
 # --- Rødt sine foreslåtte verdier ---
 RODT_BOLIG = 2.9
 RODT_NAERING = 5.0
-RODT_BUNN = 1_200_000
+RODT_BUNN = 1200000
 
 # --- Standard når av ---
-STD_BOLIG = 1.9
+STD_BOLIG = 1.8
 STD_NAERING = 4.0
-STD_BUNN = 200_000
+STD_BUNN = 200000
 
 # --- Init session states ---
 if "rodt_modus" not in st.session_state:
@@ -147,7 +147,7 @@ st.sidebar.slider(
 
 st.sidebar.slider(
     "Botnfrådrag (0–2 000 000)",
-    min_value=0, max_value=2_000_000, step=100_000,
+    min_value=0, max_value=2000000, step=100000,
     key="bunnfradrag_ny"
 )
 
