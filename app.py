@@ -294,7 +294,22 @@ st.subheader("📘 Kostnad for typiske eigendomar")
 
 df_sim = pd.DataFrame(rows)
 
-st.dataframe(df_sim, hide_index=True)
+def farge_neg_pos(val):
+    if isinstance(val, str):
+        val = float(val.replace(" kr", "").replace(" ", ""))
+    if val > 0:
+        return "background-color: #e6ffe6;"   # grøn
+    elif val < 0:
+        return "background-color: #ffe6e6;"   # raud
+    return ""
+
+df_sim_styled = (
+    df_sim.style
+    .format("{:,.0f} kr", subset=["Skatt (dagens)", "Skatt (ny)", "Mogleg endring per mnd"])
+    .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
+)
+
+st.dataframe(df_sim_styled, hide_index=True)
 
 
 tiltak = {
