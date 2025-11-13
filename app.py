@@ -55,6 +55,7 @@ st.subheader("💰 Total eigedomsskatt (2025)")
 
 total_mill = round(total_skatt_utan_fritak / 1_000_000)
 st.metric(
+    "Total skatt for kommunen: "
     f"{total_mill} mill. kr"
 )
 
@@ -197,6 +198,7 @@ total_skatt_ny = df["Skatt_ny"].sum()
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000)
 st.metric(
+    "Totalt for kommunen:",
     f"{total_mill} mill. kr"
 )
 
