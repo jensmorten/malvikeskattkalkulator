@@ -105,7 +105,7 @@ def toggle_rodt_modus():
 # --- Bestem knappens stil + tekst ---
 aktiv = st.session_state.rodt_modus
 btn_color = "#cc0000" if not aktiv else "#888888"
-btn_text = "🔴 Sett Raudt-modus" if not aktiv else "⚪ Slå av Raudt-modus"
+btn_text = "🔴 Sett i Raudt-modus" if not aktiv else "⚪ Slå av Raudt-modus"
 
 # --- CSS for knappen ---
 st.sidebar.markdown(f"""
@@ -198,7 +198,7 @@ total_skatt_ny = df["Skatt_ny"].sum()
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000)
 st.metric(
-    "Total skatt etter justering",
+    "Total skatt",
     f"{total_mill} mill. kr"
 )
 
