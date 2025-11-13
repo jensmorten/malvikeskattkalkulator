@@ -409,18 +409,18 @@ st.sidebar.markdown("""
 <hr>
 <p>
 ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigendomsskatten i Malvik kommune, 
-både for kommunebudsjetet og huseigarar. 
+både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen. 
 </p>
 <p>
 Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/nyhet/offentlig-ettersyn-eiendomsskatt-2025">
 offentleg ettersyn, eiendomsskatt 2025 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
 </p>
 <p>
-Moglege feilkjelder: data er henta inn frå eit PDF-dokument lagra på tabellformat, og sjølv om manuell kontroll av data er 
-utført kan slik metode gi enkelte feil. Vidare tar ikkje den forenkla kalkulatoren omsyn til delvis fritak for skatt. 
+Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
+utført kan slik metode gi enkelte feil. Vidare tar den forenkla kalkulatoren ikkje omsyn til "delvis fritak" for eigendomsskatt. 
 </p>
 <p>
- Ta gjerne kontakt med <a href="mailto:jens.morten.nilsen@gmail.com">jens.morten.nilsen@gmail.com</a> for spørsmål eller kommentarar.  
+Ta gjerne kontakt med <a href="mailto:jens.morten.nilsen@gmail.com">jens.morten.nilsen@gmail.com</a> for spørsmål eller kommentarar.  
 </p>
 <p>
 Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil undertreke at kalkulatoren kan brukast av alle, 
