@@ -394,7 +394,7 @@ if inntekt_diff_mill > 0:
         })
 
 
-    st.dataframe(pd.DataFrame(rows_tiltak), hide_index=True)
+    st.dataframe(pd.DataFrame(rows_tiltak), hide_index=True, use_container_width=False)
 
     # ----------------------
     # Kor mange stillingar
@@ -410,7 +410,7 @@ if inntekt_diff_mill > 0:
             "Tal mogleg årsverk": round(antal, 1)
         })
 
-    st.dataframe(pd.DataFrame(rows_stilling), hide_index=True)
+    st.dataframe(pd.DataFrame(rows_stilling), hide_index=True, use_container_width=False)
 
 st.sidebar.markdown("""
 <hr>
