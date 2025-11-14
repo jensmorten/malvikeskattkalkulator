@@ -205,7 +205,7 @@ st.metric(
 st.caption("Basert på brukaren sine val for promillesats og bunnfradrag.")
 
 inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
-inntekt_diff_mill = round(inntekt_diff / 1_000_000)
+inntekt_diff_mill = round(inntekt_diff / 1_000_000,1)
 
 if inntekt_diff_mill > 0:
     tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
@@ -315,7 +315,7 @@ df_sim_styled = (
     .set_properties(**{
         "font-size": "16px",     # større skrift
         "padding": "10px",       # meir luft
-        "text-align": "left"
+        "text-align": "right"
     })
     # fet og bakgrunn for header
     .set_table_styles([
@@ -331,7 +331,7 @@ df_sim_styled = (
     ])
 )
 
-st.dataframe(df_sim_styled, hide_index=True, use_container_width=True)
+st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
 
 
 tiltak = {
