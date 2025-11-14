@@ -342,11 +342,11 @@ st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
 
 
 tiltak = {
-    "Gratis folkebad": 240000,
-    "Fortsette å holde barnetrygd utenfor beregning av sosialhjelp": 1000000,
-    "Fortsette å ha gratis trygghetsalarm for personer med inntekt under 2G": 400000,
+    "Gjenninføre gratis folkebad i Hommelvik": 240000,
+    "Fortsette å holde barnetrygd utenfor beregning av sosialhjelp dersom regjeringa ikke snur": 1000000,
+    "Fortsette å ha gratis tryggheitsalarm for personer med inntekt under 2G": 400000,
     "Oppretthalde vidareutdanning lærarar": 1000000,
-    "Arbeidsklær til barnehage/SFO": 1700000,
+    "Arbeidsklær til tilsette i barnehage/SFO": 1700000,
     "Redusert kulturskolepris": 400000,
     "Halv husleie kommunale boliger juli og desember": 200000,
     "Stoppe tvangssalg ved kommunale gebyrer": 100000
