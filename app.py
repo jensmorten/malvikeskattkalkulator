@@ -4,8 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import io
 
-st.set_page_config(page_title="Eigendomsskatt i Malvik", layout="wide")
-st.title("🏠 Eigendomssatt i Malvik")
+st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
+st.title("🏠 Eigedomsskatt i Malvik")
 
 # --- Les data ---
 URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/skatteliste_clean_bunn.csv"
@@ -257,10 +257,10 @@ def to_mill(x):
 
 rows = []
 
-for label, takst in [("låg takst (~0.25-percentil)", p25),
-                     ("median takst (~0.5-percentil)", p50),
-                     ("høg takst, (~0.75-percentil)", p75),
-                     ("svørt høg takst (~0.99-percentil)", p99)]:
+for label, takst in [("Eigedom med låg takst (~0.25-percentil)", p25),
+                     ("Eigedom med median takst (~0.5-percentil)", p50),
+                     ("Eigedom med høg takst, (~0.75-percentil)", p75),
+                     ("Eigedom med høg takst (~0.99-percentil)", p99)]:
 
     # dagens satser
     skatt_dagens = beregn_skatt(
@@ -290,7 +290,7 @@ for label, takst in [("låg takst (~0.25-percentil)", p25),
     
     
 
-st.subheader("📘 Kostnad for typiske eigendomar")
+st.subheader("📘 Kostnad for typiske eigedomar")
 
 df_sim = pd.DataFrame(rows)
 
@@ -408,7 +408,7 @@ if inntekt_diff_mill > 0:
 st.sidebar.markdown("""
 <hr>
 <p>
-ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigendomsskatten i Malvik kommune, 
+ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigedomsskatten i Malvik kommune, 
 både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen. 
 </p>
 <p>
@@ -417,7 +417,7 @@ offentleg ettersyn, eiendomsskatt 2025 i Malvik</a>. All data som er brukt ligg 
 </p>
 <p>
 Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
-utført kan slik metode gi enkelte feil. Vidare tar den forenkla kalkulatoren ikkje omsyn til "delvis fritak" for eigendomsskatt. 
+utført kan slik metode gi enkelte feil. Vidare tar den forenkla kalkulatoren ikkje omsyn til "delvis fritak" for eigedomsskatt. 
 </p>
 <p>
 Ta gjerne kontakt med <a href="mailto:jens.morten.nilsen@gmail.com">jens.morten.nilsen@gmail.com</a> for spørsmål eller kommentarar.  
