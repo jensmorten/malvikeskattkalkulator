@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import io
 
-st.set_page_config(page_title="Eigendomssatt i Malvik", layout="wide")
+st.set_page_config(page_title="Eigendomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigendomssatt i Malvik")
 
 # --- Les data ---
@@ -25,7 +25,7 @@ df=load_data(URL)
 st.markdown(
     f"""
 <div style="padding: 0.6em; border-radius: 5px; background-color: #e6ffed; border-left: 4px solid #00cc44;">
-<b></b> ({len(df)} rader med data) frå Malvik kommune (2025), kjelde:
+<b></b> {len(df)} rader med data er lasta for 2025 ned frå Malvik kommune:
 <a href="https://www.malvik.kommune.no/nyhet/offentlig-ettersyn-eiendomsskatt-2025" target="_blank">
 Malvik kommune
 </a>
