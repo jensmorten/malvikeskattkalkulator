@@ -267,7 +267,7 @@ rows = []
 for label, takst in [("Eigedom med låg takst (~0.25-percentil)", p25),
                      ("Eigedom med median takst (~0.5-percentil)", p50),
                      ("Eigedom med høg takst, (~0.75-percentil)", p75),
-                     ("Eigedom med høg takst (~0.99-percentil)", p99)]:
+                     ("Eigedom med svært høg takst (~0.99-percentil)", p99)]:
 
     # dagens satser
     skatt_dagens = beregn_skatt(
