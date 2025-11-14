@@ -203,9 +203,11 @@ st.metric(
 )
 
 
-text= "Basert på brukaren sine val for promillesats og bunnfradrag."
+text= "Basert på brukaren sine val for promillesats og botnfrådrag."
 if bolig_sats==1.8 and bunnfradrag_ny==200000:
-    text = text + "Primillesats 1.8‰ og botnfrådrag 200 000 tilsvarar kommunedirektørens forslag for 2026 som skal behandlast i kommunestyret 8.12.2025"
+    text = text + "Promillesats 1.8‰ og botnfrådrag 200 000 tilsvarar kommunedirektørens forslag for 2026 som skal behandlast i kommunestyret 8.12.2025"
+elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
+    text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026. "
 
 st.caption(text)
 
