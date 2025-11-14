@@ -313,7 +313,7 @@ df_sim_styled = (
     .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
     # generelt utseende
     .set_properties(**{
-        "font-size": "16px",     # større skrift
+        "font-size": "26px",     # større skrift
         "padding": "10px",       # meir luft
         "text-align": "right"
     })
