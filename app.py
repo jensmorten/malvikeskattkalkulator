@@ -364,6 +364,14 @@ stillinger = {
     "Hjelpepleiar": 750000,
 }
 
+def farge_har_rad(val):
+    if isinstance(val, str):
+        if val.startswith("ja"):
+            return "background-color: #e5ffe5;"   # grøn
+        elif val == "nei":
+            return "background-color: #ffe5e5;"   # raud
+    return ""
+
 if inntekt_diff_mill > 0:
 
     inntekt_diff_kr = inntekt_diff_mill * 1000000
@@ -391,13 +399,18 @@ if inntekt_diff_mill > 0:
         rows_tiltak.append({
         "Tiltak": namn,
         "Kostnad": f"{kostnad:,.0f} kr",
-        "Kan gjennomførast": kan,
+        "Har råd": kan,
         "Gjenværende budsjett": f"{remaining:,.0f} kr"
         })
 
 
-    st.dataframe(pd.DataFrame(rows_tiltak), hide_index=True, use_container_width=False)
-
+    df_tiltak = pd.DataFrame(rows_tiltak)
+    df_tiltak_styled = (
+        df_tiltak
+            .style
+            .applymap(farge_har_rad, subset=["Har råd"])
+    )
+    st.dataframe(df_tiltak_styled, hide_index=True, use_container_width=False)
     # ----------------------
     # Kor mange stillingar
     # ----------------------
