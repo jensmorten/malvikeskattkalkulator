@@ -374,7 +374,7 @@ if inntekt_diff_mill > 0:
     # ----------------------
     # Tiltak som kan finansierast
     # ----------------------
-    st.markdown("### 🟩 Tiltak som kan finansierast")
+    st.markdown("### 🟩 Ekstra ting vi har råd til:")
 
     remaining = inntekt_diff_kr
     rows_tiltak = []
@@ -401,7 +401,7 @@ if inntekt_diff_mill > 0:
     # ----------------------
     # Kor mange stillingar
     # ----------------------
-    st.markdown("### 👩‍🏫 Kor mange stillingar kan opprettast?")
+    st.markdown("### 👩‍🏫 Eller hva med ekstra bemanning?")
 
     rows_stilling = []
     for kategori, løn in stillinger.items():
