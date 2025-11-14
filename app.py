@@ -296,7 +296,8 @@ df_sim = pd.DataFrame(rows)
 
 def farge_neg_pos(val):
     try:
-        clean = float(val.replace(" kr", "").replace(",", "").replace(" ", ""))
+        # konverter til float sjølv om det er tekst med " kr" eller tusenskilje
+        clean = float(str(val).replace(" kr", "").replace(",", "").replace(" ", ""))
     except:
         return ""
     if clean < 0:
@@ -305,33 +306,47 @@ def farge_neg_pos(val):
         return "background-color: #ffe6e6;"   # raud
     return ""
 
-
-df_sim_styled = (
-    df_sim
-    .style
-    # farge på endring
+# bygg stylaren
+styler = (
+    df_sim.style
+    .hide_index()  # skjul index
     .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
-    # generelt utseende
     .set_properties(**{
-        "font-size": "26px",     # større skrift
-        "padding": "10px",       # meir luft
+        "padding": "10px",
         "text-align": "right"
     })
-    # fet og bakgrunn for header
+    # set_table_styles med meir spesifikke selectorar og !important for å sørge for at dei ikkje blir overstyrt
     .set_table_styles([
-        {
-            "selector": "th",
-            "props": [
-                ("background-color", "#f0f0f0"),
-                ("font-weight", "bold"),
-                ("font-size", "17px"),
-                ("padding", "12px")
-            ]
-        }
+        {"selector": "table",
+         "props": [("width", "100%"), ("border-collapse", "collapse")]},
+        {"selector": "th",
+         "props": [("background-color", "#f0f0f0 !important"),
+                   ("font-weight", "700 !important"),
+                   ("font-size", "17px !important"),
+                   ("padding", "12px !important"),
+                   ("text-align", "right !important")]},
+        {"selector": "td",
+         "props": [("font-size", "16px !important"),
+                   ("padding", "10px !important"),
+                   ("text-align", "right !important")]},
+        # valfri: border rundt celler
+        {"selector": "th, td",
+         "props": [("border", "1px solid #e8e8e8")]}
     ])
 )
 
-st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
+# render til html og vis med unsafe_allow_html
+html = styler.render()
+
+# pakk inn i ein div for horisontal rulling om nødvendig
+st.markdown(
+    f"""
+    <div style="overflow-x:auto;">
+      {html}
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 tiltak = {
