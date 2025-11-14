@@ -202,7 +202,12 @@ st.metric(
     value=f"{total_mill} mill. kr"
 )
 
-st.caption("Basert på brukaren sine val for promillesats og bunnfradrag.")
+
+text= "Basert på brukaren sine val for promillesats og bunnfradrag."
+if bolig_sats==1.8 and bunnfradrag_ny==200000:
+    text = text + "Primillesats 1.8‰ og botnfrådrag 200 000 tilsvarar kommunedirektørens forslag for 2026 som skal behandlast i kommunestyret 8.12.2025"
+
+st.caption(text)
 
 inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,1)
