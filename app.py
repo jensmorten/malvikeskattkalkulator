@@ -275,10 +275,10 @@ def to_mill(x):
 
 rows = []
 
-for label, takst in [("Eigedom med låg takst (~0.25-percentil)", p25),
-                     ("Eigedom med median takst (~0.5-percentil)", p50),
-                     ("Eigedom med høg takst, (~0.75-percentil)", p75),
-                     ("Eigedom med svært høg takst (~0.99-percentil)", p99)]:
+for label, takst in [("Eigedom med låg takst (~0.25-kvantil)", p25),
+                     ("Eigedom med median takst (~0.5-kvantil)", p50),
+                     ("Eigedom med høg takst, (~0.75-kvantil)", p75),
+                     ("Eigedom med svært høg takst (~0.99-kvantil)", p99)]:
 
     # dagens satser
     skatt_dagens = beregn_skatt(
