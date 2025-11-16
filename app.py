@@ -195,7 +195,7 @@ df["Skatt_ny"] = (
 
 total_skatt_ny = df["Skatt_ny"].sum()
 ##jenks konstant
-total_skatt_ny=total_skatt_ny*1.02
+total_skatt_ny=total_skatt_ny*1.015
 
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000,1)
@@ -224,7 +224,7 @@ st.caption(text)
 total_skatt_ny=kd_total_mill*1000000
 
 inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
-inntekt_diff_mill = round(inntekt_diff / 1_000_000,1)
+inntekt_diff_mill = round(inntekt_diff / 1_000_000,2)
 
 if inntekt_diff_mill > 0:
     tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
