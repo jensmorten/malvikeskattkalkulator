@@ -450,11 +450,11 @@ Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/nyhet
 offentleg ettersyn, eiendomsskatt 2025 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
 </p>
 <p>
-<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning input der kommunedirektøren har publisert sine berekningar. Relativ diffeanse for desse punkt-sjekkane mellom -0.3% og 1.3%,
- årsaka er truleg punkt som er diskutert over under "moglege feilkjelder". Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.               
+<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning input der kommunedirektøren har publisert sine berekningar. Relativ diffeanse for desse punkt-sjekkane mellom -0.3% og 1.3%. 
+Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.               
 </p>
 <p>
-Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
+Moglege feilkjelder som kan forklare avvik: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
 utført kan slik metode gi enkelte feil. Vidare tar den forenkla kalkulatoren ikkje omsyn til "delvis fritak" for eigedomsskatt. 
 
 </p>
