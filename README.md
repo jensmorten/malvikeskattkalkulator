@@ -29,7 +29,7 @@ Som ein skan sjå er den relative diffeansen for desse punkt-sjekkane mellom -0.
 
 Validering av effekten av bunnfradrag er utført med  <a href="https://pub.framsikt.net/2025/malvik/bm-2025-handlings-_og_%C3%B8konomiplan_2025-2028#/generic/summary/introduction/ead26f38-ec6f-44b7-b320-bececd7a43de-cn"> svar på spørsmål i 2025</a>:
 
-| Bunnfradrag         | Differanse, KD | Differanse, kalkulator |
+| Bunnfradrag         | Differanse, kommunedirektørens berekning | Differanse, kalkulator |
 |---------------------|----------------|-------------------------|
 | Ingen               | +1,7           | +1,8                    |
 | 100 000             | +0,9           | +0,9                    |
