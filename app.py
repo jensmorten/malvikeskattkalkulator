@@ -194,6 +194,8 @@ df["Skatt_ny"] = (
 )
 
 total_skatt_ny = df["Skatt_ny"].sum()
+##jenks konstant
+total_skatt_ny=total_skatt_ny*1.02
 
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000,1)
@@ -201,6 +203,14 @@ st.metric(
     label="",
     value=f"{total_mill} mill. kr"
 )
+
+st.subheader("💁‍♂️ Kommunedirektørens forslag (2026)")
+kd_total_mill = 35.8
+st.metric(
+    label="",
+    value=f"{total_mill} mill. kr"
+)
+
 
 
 text= "Basert på brukaren sine val for promillesats og botnfrådrag."
@@ -210,6 +220,8 @@ elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
     text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026. "
 
 st.caption(text)
+
+total_skatt_ny=kd_total_mill
 
 inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,1)
