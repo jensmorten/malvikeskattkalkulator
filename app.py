@@ -226,9 +226,9 @@ inntekt_diff = total_skatt_ny - kd_total_mill*1000000
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,2)
 
 if round(inntekt_diff_mill,0) > 0:
-    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr samanlikna med kommunedirektørens forslag**."
 elif round(inntekt_diff,0) < 0:
-    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
+    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr samanlikna med kommunedirektørens forslag**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
     
