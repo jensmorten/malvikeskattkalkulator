@@ -221,7 +221,7 @@ elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
 
 st.caption(text)
 
-total_skatt_ny=kd_total_mill
+total_skatt_ny=kd_total_mill*1000000
 
 inntekt_diff = total_skatt_ny - total_skatt_utan_fritak
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,1)
