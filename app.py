@@ -225,9 +225,9 @@ st.caption(text)
 inntekt_diff = total_skatt_ny - kd_total_mill*1000000
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,2)
 
-if inntekt_diff_mill > 0:
+if round(inntekt_diff_mill,0) > 0:
     tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr**."
-elif inntekt_diff < 0:
+elif round(inntekt_diff,0) < 0:
     tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
