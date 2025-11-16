@@ -384,7 +384,7 @@ def farge_har_rad(val):
             return "background-color: #ffe5e5;"   # raud
     return ""
 
-if inntekt_diff_mill > 0:
+if round(inntekt_diff_mill,0) > 0:
 
     inntekt_diff_kr = inntekt_diff_mill * 1000000
 
