@@ -25,5 +25,15 @@ Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.ne
 | **Differanse (mill kr)**           | 0.4 | 0 | -0.1 | -0.5 | 0.7 | 1 |
 | **Relative differanse**  | 1.3% | 0.0% |-0.3%| -0.9%| 0.9% | 1.3% |  
 
-
 Som ein skan sjå er den relative diffeansen for desse punkt-sjekkane mellom -0.3% og 1.3%, årsaka er truleg det som er diskutert over under "moglege feilkjelder". Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk. 
+
+Validering av effekten av bunnfradrag er utført med  <a href=https://pub.framsikt.net/2025/malvik/bm-2025-handlings-_og_%C3%B8konomiplan_2025-2028#/generic/summary/introduction/ead26f38-ec6f-44b7-b320-bececd7a43de-cn"> svar på spørsmål i 2025</a>:
+
+| Bunnfradrag         | Differanse, KD | Differanse, kalkulator |
+|---------------------|----------------|-------------------------|
+| Ingen               | +1,7           | +1,8                    |
+| 100 000             | +0,9           | +0,9                    |
+| 200 000             | 0              | 0                       |
+| 300 000             | −0,9           | −0,9                    |
+| 400 000             | −1,8           | −1,8                    |
+| 500 000             | −2,6           | −2,7                    |
