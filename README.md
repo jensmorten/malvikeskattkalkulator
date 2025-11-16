@@ -26,4 +26,4 @@ Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.ne
 | **Relative differanse**  | 1.3% | 0.0% |-0.3%| -0.9%| 0.9% | 1.3% |  
 
 
-Som ein skan sjå er den relative diffeansel for disse punkt-sjekkene mellom -0.3% og 1.3%, årsaka er truleg punkt som er diskutert over under "moglege feilkjelder". Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk. 
+Som ein skan sjå er den relative diffeansel for disse punkt-sjekkane mellom -0.3% og 1.3%, årsaka er truleg punkt som er diskutert over under "moglege feilkjelder". Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk. 
