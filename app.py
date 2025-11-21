@@ -275,9 +275,9 @@ def to_mill(x):
 
 rows = []
 
-for label, takst in [("Eigedom med låg takst (nedre kvartil)", p25),
-                     ("Eigedom med median takst (median)", p50),
-                     ("Eigedom med høg takst, (øver kvartil)", p75),
+for label, takst in [("Eigedom med låg takst (~nedre kvartil)", p25),
+                     ("Eigedom med median takst (~0.5-persentil)", p50),
+                     ("Eigedom med høg takst, (~øvre kvartil)", p75),
                      ("Eigedom med svært høg takst (~0.99-persentil)", p99)]:
 
     # dagens satser
