@@ -426,7 +426,7 @@ if round(inntekt_diff_mill,0) > 0:
     # ----------------------
     # Kor mange stillingar
     # ----------------------
-    st.markdown("### 👩‍🏫 Eller hva med ekstra bemanning?")
+    st.markdown("### 👩‍🏫 Eller kva med ekstra bemanning?")
 
     rows_stilling = []
     for kategori, løn in stillinger.items():
