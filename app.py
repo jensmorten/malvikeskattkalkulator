@@ -284,7 +284,7 @@ for label, takst in [("Eigedom med låg takst (~nedre kvartil)", p25),
     skatt_dagens = beregn_skatt(
         takst=takst,
         skattenivå=70,   # *antatt lik for alle*
-        bunnfradrag=200000, # *typisk 0 eller 200k*
+        bunnfradrag=320000, # *typisk 0 eller 200k*
         promille=1.9    # blir ≈ 1.9
     )
 
@@ -324,11 +324,11 @@ def farge_neg_pos(val):
     return ""
 
 
-df_sim_styled = (
-    df_sim
-    .style
-    # farge på endring
-    .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
+#df_sim_styled = (
+#    df_sim
+#    .style
+#    # farge på endring
+#    .applymap(farge_neg_pos, subset=["Mogleg endring per mnd"])
     # generelt utseende
     #.set_properties(**{
     #    "font-size": "26px",     # større skrift
@@ -347,7 +347,7 @@ df_sim_styled = (
     #        ]
     #    }
     #])
-)
+#)
 
 #st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
 st.dataframe(df_sim, hide_index=True, use_container_width=False)
