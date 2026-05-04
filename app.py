@@ -8,11 +8,12 @@ st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigedomsskatt i Malvik")
 
 # --- Les data ---
-URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset.csv"
+URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/skatteliste_clean_bunn.csv"
 
 def load_data(url):
     return pd.read_csv(
         url,
+        dtype=str,
         sep=",",
         engine="python",      # MER ROBUST
         on_bad_lines="skip",  # HOPP OVER TOMME/STØY-LINJER
@@ -32,6 +33,17 @@ Malvik kommune
 """,
     unsafe_allow_html=True
 )
+# --- Tvungen tallkonvertering ---
+for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "Skatt"]:
+    df[col] = (
+        df[col]
+        .astype(str)
+        .str.replace(" ", "")
+        .str.replace(",", ".")
+        .str.extract(r"([0-9\.]+)")        # hent kun tall og punktum
+        .fillna("0")
+        .astype(float)
+    )
 # --- Total skatt ---
 df["Fritak"] = df["Fritak"].astype(str).str.strip().str.lower()
 
