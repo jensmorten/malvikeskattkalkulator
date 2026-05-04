@@ -204,13 +204,14 @@ st.metric(
     value=f"{total_mill} mill. kr"
 )
 
-st.subheader("💁‍♂️ Kommunedirektørens forslag (2027)")
-kd_total_mill = "ikkje lagt fram enno"
-st.metric(
-    label="",
-    value=f"{kd_total_mill} mill. kr"
-)
+#st.subheader("💁‍♂️ Kommunedirektørens forslag (2027)")
+#kd_total_mill = "ikkje lagt fram enno"
+#st.metric(
+#    label="",
+#    value=f"{kd_total_mill} mill. kr"
+#)
 
+kd_total_mill=total_mill
 
 text= "Basert på brukaren sine val for promillesats og botnfrådrag."
 if bolig_sats==1.8 and bunnfradrag_ny==320000:
