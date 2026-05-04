@@ -11,7 +11,7 @@ Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til t
 
 Ta gjerne kontakt med jens.morten.nilsen@gmail.com for spørsmål eller kommentarar.
 
-Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil undertreke at kalkulatoren kan brukast av alle, og den reknar like bra utansett som skatten går opp eller ned.
+Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil understreke at kalkulatoren kan brukast av alle, og den reknar like bra utansett som skatten går opp eller ned.
 
 Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.net/2026/malvik/bm-2026-hop_2026_2029#/generic/summary/introduction/ab2c2b22-5314-4136-90c7-3d4fd3e39a93-cn">  kommunediretørens beregning: </a>
 
