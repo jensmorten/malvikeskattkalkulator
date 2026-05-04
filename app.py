@@ -197,7 +197,7 @@ total_skatt_ny = df["Skatt_ny"].sum()
 ##jenks konstant
 total_skatt_ny=total_skatt_ny*1.015
 
-st.subheader("🔮 Ny berekna eigedomsskatt (2027)")
+st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000,1)
 st.metric(
     label="",
@@ -285,7 +285,7 @@ for label, takst in [("Eigedom med låg takst (~nedre kvartil)", p25),
         takst=takst,
         skattenivå=70,   # *antatt lik for alle*
         bunnfradrag=320000, # *typisk 0 eller 200k*
-        promille=1.9    # blir ≈ 1.9
+        promille=1.8    # blir ≈ 1.9
     )
 
     # nye satser (basert på sliderne)
