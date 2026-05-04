@@ -196,7 +196,7 @@ df["Skatt_ny"] = (
 total_skatt_ny = df["Skatt_ny"].sum()
 ##jenks konstant
 #total_skatt_ny=total_skatt_ny*1.015 ###
-total_skatt_ny=total_skatt_ny*0.995
+total_skatt_ny=total_skatt_ny*0.998
 
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
 total_mill = round(total_skatt_ny / 1_000_000,1)
