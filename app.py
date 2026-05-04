@@ -25,7 +25,7 @@ df=load_data(URL)
 st.markdown(
     f"""
 <div style="padding: 0.6em; border-radius: 5px; background-color: #e6ffed; border-left: 4px solid #00cc44;">
-<b></b> {len(df)} rader med data er lasta for 2025 ned frå Malvik kommune:
+<b></b> {len(df)} rader med data er lasta for 2026 ned frå Malvik kommune:
 <a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025", target="_blank">
 Malvik kommune
 </a>
@@ -73,7 +73,7 @@ RODT_BUNN = 1200000
 # --- Standard når av ---
 STD_BOLIG = 1.8
 STD_NAERING = 4.0
-STD_BUNN = 200000
+STD_BUNN = 320000
 
 # --- Init session states ---
 if "rodt_modus" not in st.session_state:
@@ -147,7 +147,7 @@ st.sidebar.slider(
 
 st.sidebar.slider(
     "Botnfrådrag (0–2 000 000)",
-    min_value=0, max_value=2000000, step=100000,
+    min_value=0, max_value=2000000, step=10000,
     key="bunnfradrag_ny"
 )
 
@@ -349,7 +349,9 @@ df_sim_styled = (
     #])
 )
 
-st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
+#st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
+st.dataframe(df_sim, hide_index=True, use_container_width=False)
+
 
 st.sidebar.markdown("""
 <hr>
