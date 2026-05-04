@@ -8,11 +8,12 @@ st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigedomsskatt i Malvik")
 
 # --- Les data ---
-URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset.csv"
+URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/skatteliste_clean_bunn.csv"
 
 def load_data(url):
     return pd.read_csv(
         url,
+        dtype=str,
         sep=",",
         engine="python",      # MER ROBUST
         on_bad_lines="skip",  # HOPP OVER TOMME/STØY-LINJER
@@ -25,13 +26,24 @@ st.markdown(
     f"""
 <div style="padding: 0.6em; border-radius: 5px; background-color: #e6ffed; border-left: 4px solid #00cc44;">
 <b></b> {len(df)} rader med data er lasta for 2025 ned frå Malvik kommune:
-<a href="https://www.malvik.kommune.no/nyhet/offentlig-ettersyn-eiendomsskatt-2025" target="_blank">
+<a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025", target="_blank">
 Malvik kommune
 </a>
 </div>
 """,
     unsafe_allow_html=True
 )
+# --- Tvungen tallkonvertering ---
+for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "Skatt"]:
+    df[col] = (
+        df[col]
+        .astype(str)
+        .str.replace(" ", "")
+        .str.replace(",", ".")
+        .str.extract(r"([0-9\.]+)")        # hent kun tall og punktum
+        .fillna("0")
+        .astype(float)
+    )
 # --- Total skatt ---
 df["Fritak"] = df["Fritak"].astype(str).str.strip().str.lower()
 
@@ -39,7 +51,7 @@ df_utan_fritak = df[df["Fritak"] == "ingen"]
 
 total_skatt_utan_fritak = df_utan_fritak["Skatt"].sum()
 
-st.subheader("💰 Total eigedomsskatt (2025)")
+st.subheader("💰 Total eigedomsskatt (2026)")
 
 total_mill = round(total_skatt_utan_fritak / 1_000_000,1)
 st.metric(
@@ -122,13 +134,13 @@ with st.sidebar:
 # Sliderne (alltid synlige)
 # -----------------------------------
 st.sidebar.slider(
-    "Promillesats for bolig (1.9‰ i 2025)",
+    "Promillesats for bolig (1.8‰ i 2026)",
     min_value=0.0, max_value=4.0, step=0.1,
     key="bolig_sats"
 )
 
 st.sidebar.slider(
-    "Promillesats for næring (4.0‰ i 2025)",
+    "Promillesats for næring (4.0‰ i 2026)",
     min_value=0.0, max_value=7.0, step=0.1,
     key="naering_sats"
 )
@@ -151,10 +163,10 @@ bunnfradrag_ny = st.session_state.bunnfradrag_ny
 # --- Ny promillesats basert på type eiendom ---
 df["Promillesats_ny"] = df["Promillesats"]  # start med dagens sats
 
-# bolig: 1.9 ‰ → bruk bolig_sats
-df.loc[df["Promillesats"] == 1.9, "Promillesats_ny"] = bolig_sats
-df.loc[df["Bunnfradrag"] == 200000, "Bunnfradrag_ny"] = bunnfradrag_ny
-df.loc[df["Bunnfradrag"] != 200000, "Bunnfradrag_ny"] = df["Bunnfradrag"] 
+# bolig: 1.8 ‰ → bruk bolig_sats
+df.loc[df["Promillesats"] == 1.8, "Promillesats_ny"] = bolig_sats
+df.loc[df["Bunnfradrag"] == 320000, "Bunnfradrag_ny"] = bunnfradrag_ny
+df.loc[df["Bunnfradrag"] != 320000, "Bunnfradrag_ny"] = df["Bunnfradrag"] 
 
 # næring: 4.0 ‰ → bruk næring_sats
 df.loc[df["Promillesats"] == 4.0, "Promillesats_ny"] = naering_sats
@@ -185,27 +197,26 @@ total_skatt_ny = df["Skatt_ny"].sum()
 ##jenks konstant
 total_skatt_ny=total_skatt_ny*1.015
 
-st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
+st.subheader("🔮 Ny berekna eigedomsskatt (2027)")
 total_mill = round(total_skatt_ny / 1_000_000,1)
 st.metric(
     label="",
     value=f"{total_mill} mill. kr"
 )
 
-st.subheader("💁‍♂️ Kommunedirektørens forslag (2026)")
-kd_total_mill = 35.8
+st.subheader("💁‍♂️ Kommunedirektørens forslag (2027)")
+kd_total_mill = "ikkje lagt fram enno"
 st.metric(
     label="",
     value=f"{kd_total_mill} mill. kr"
 )
 
 
-
 text= "Basert på brukaren sine val for promillesats og botnfrådrag."
-if bolig_sats==1.8 and bunnfradrag_ny==200000:
-    text = text + "Promillesats 1.8‰ og botnfrådrag 200 000 tilsvarar kommunedirektørens forslag for 2026 som skal behandlast i kommunestyret 8.12.2025"
+if bolig_sats==1.8 and bunnfradrag_ny==320000:
+    text = text + "Promillesats 1.8‰ og botnfrådrag 320 000 tilsvarar vedtatt nivå i 2026"
 elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
-    text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026. "
+    text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026"
 
 st.caption(text)
 
@@ -339,95 +350,6 @@ df_sim_styled = (
 
 st.dataframe(df_sim_styled, hide_index=True, use_container_width=False)
 
-
-tiltak = {
-    "Gjenninføre gratis folkebad i Hommelvik": 160000,
-    "Arbeidsklær tilsette i barnehage/SFO": 900000,
-    "Behalde 2025-sats for SFO ": 700000,
-    "Behalde 2025-sats for kulturskolen og kommunale bygg": 100000,
-    "Oppretthalde etterutdanning for lærarar": 800000,
-    "Gratis tryggheitsalarm for dei med inntekt under 2G": 400000,
-    "Ingen skal bli heinlause pga. kommunale gebyr": 100000,
-    "Halv leige for kommunale bustader i juli og desember": 200000,
-    "Auka sosialhjelp": 1000000,
-}
-
-stillinger = {
-    "Lærar": 787200,
-    "Barnehagelærar": 787200,
-    "Lektor": 880500,
-    "Spesialpedagog": 880000,
-    "Fagarbeidar": 705000,
-    "Assistent": 605500,
-    "Kjøkkenassistent (fagbrev)": 705000,
-    "Kjøkkenassistent": 605500,
-    "Sjukepleiar": 850000,
-    "Hjelpepleiar": 750000,
-}
-
-def farge_har_rad(val):
-    if isinstance(val, str):
-        if val.startswith("ja"):
-            return "background-color: #e5ffe5;"   # grøn
-        elif val == "nei":
-            return "background-color: #ffe5e5;"   # raud
-    return ""
-
-if round(inntekt_diff_mill,0) > 0:
-
-    inntekt_diff_kr = inntekt_diff_mill * 1000000
-
-    st.subheader("🧮 Kva kan kommunen gjere med denne inntektsauken?")
-    st.write(f"Tilgjengelege midlar: **{inntekt_diff_kr:,.0f} kr**")
-
-    # ----------------------
-    # Tiltak som kan finansierast
-    # ----------------------
-    st.markdown("### 🟩 Ekstra ting vi har råd til:")
-
-    remaining = inntekt_diff_kr
-    rows_tiltak = []
-
-    for namn, kostnad in tiltak.items():
-        if kostnad == 0:
-            kan = "ja (gratis)"
-        elif kostnad <= remaining:
-            kan = "ja"
-            remaining -= kostnad
-        else:
-            kan = "nei"
-
-        rows_tiltak.append({
-        "Tiltak": namn,
-        "Kostnad": f"{kostnad:,.0f} kr",
-        "Har råd": kan,
-        "Gjenværende budsjett": f"{remaining:,.0f} kr"
-        })
-
-
-    df_tiltak = pd.DataFrame(rows_tiltak)
-    df_tiltak_styled = (
-        df_tiltak
-            .style
-            .applymap(farge_har_rad, subset=["Har råd"])
-    )
-    st.dataframe(df_tiltak_styled, hide_index=True, use_container_width=False)
-    # ----------------------
-    # Kor mange stillingar
-    # ----------------------
-    st.markdown("### 👩‍🏫 Eller kva med ekstra bemanning?")
-
-    rows_stilling = []
-    for kategori, løn in stillinger.items():
-        antal = inntekt_diff_kr / løn
-        rows_stilling.append({
-            "Stilling": kategori,
-            "Årskostnad": f"{løn:,.0f} kr",
-            "Tal mogleg årsverk": round(antal, 1)
-        })
-
-    st.dataframe(pd.DataFrame(rows_stilling), hide_index=True, use_container_width=False)
-
 st.sidebar.markdown("""
 <hr>
 <p>
@@ -435,8 +357,8 @@ st.sidebar.markdown("""
 både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen. 
 </p>
 <p>
-Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/nyhet/offentlig-ettersyn-eiendomsskatt-2025">
-offentleg ettersyn, eiendomsskatt 2025 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
+Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025">
+offentleg ettersyn, eiendomsskatt 2026 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
 </p>
 <p>
 <a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning input der kommunedirektøren har publisert sine berekningar. Relativ diffeanse for desse punkt-sjekkane mellom -0.3% og 1.3%. 
