@@ -198,7 +198,7 @@ total_skatt_ny = df["Skatt_ny"].sum()
 #total_skatt_ny=total_skatt_ny*1.015 ###
 total_skatt_ny=total_skatt_ny*0.997
 
-st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
+st.subheader("🔮 Kalkulaorens berekna eigedomsskatt (2026)")
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
 st.metric(
     label="",
