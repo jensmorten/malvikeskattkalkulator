@@ -222,12 +222,11 @@ st.caption(text)
 
 
 inntekt_diff = total_mill_ny - total_mill
-inntekt_diff_mill = round(inntekt_diff / 1_000_000,2)
 
-if round(inntekt_diff_mill,0) > 0:
-    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr samanlikna med dagens situasjon (forventa 2026)**."
+if round(inntekt_diff,0) > 0:
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med dagens situasjon (forventa 2026)**."
 elif round(inntekt_diff,0) < 0:
-    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr samanlikna med kommunedirektørens forslag**."
+    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff):.1f} millionar kr samanlikna med kommunedirektørens forslag**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
     
