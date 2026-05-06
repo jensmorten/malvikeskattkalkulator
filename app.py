@@ -187,7 +187,7 @@ df.loc[df["Skatt_ny"] < 300, "Skatt_ny"] = 0
 # 5. Rund av til nærmaste krone
 df["Skatt_ny"] = (
     df["Skatt_ny"]
-    .fillna(0)     # <- viktig
+    .fillna(0)   
     .replace([np.inf, -np.inf], 0)
     .round(0)
     .astype(int)
@@ -199,10 +199,10 @@ total_skatt_ny = df["Skatt_ny"].sum()
 total_skatt_ny=total_skatt_ny*0.997
 
 st.subheader("🔮 Ny berekna eigedomsskatt (2026)")
-total_mill = round(total_skatt_ny / 1_000_000,1)
+total_mill_ny = round(total_skatt_ny / 1_000_000,1)
 st.metric(
     label="",
-    value=f"{total_mill} mill. kr"
+    value=f"{total_mill_ny} mill. kr"
 )
 
 #st.subheader("💁‍♂️ Kommunedirektørens forslag (2027)")
@@ -211,8 +211,6 @@ st.metric(
 #    label="",
 #    value=f"{kd_total_mill} mill. kr"
 #)
-
-kd_total_mill=total_mill
 
 text= "Basert på brukaren sine val for promillesats og botnfrådrag."
 if bolig_sats==1.8 and bunnfradrag_ny==320000:
@@ -223,11 +221,11 @@ elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
 st.caption(text)
 
 
-inntekt_diff = total_skatt_ny - kd_total_mill*1000000
+inntekt_diff = total_mill_ny - total_mill
 inntekt_diff_mill = round(inntekt_diff / 1_000_000,2)
 
 if round(inntekt_diff_mill,0) > 0:
-    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr samanlikna med kommunedirektørens forslag**."
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff_mill:.1f} millionar kr samanlikna med dagens situasjon (forventa 2026)**."
 elif round(inntekt_diff,0) < 0:
     tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff_mill):.1f} millionar kr samanlikna med kommunedirektørens forslag**."
 else:
