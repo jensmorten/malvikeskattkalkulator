@@ -8,7 +8,7 @@ st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigedomsskatt i Malvik (under arbeid for 2026 )")
 
 # --- Les data ---
-URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/skatteliste_clean_bunn.csv"
+URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset.csv"
 
 def load_data(url):
     return pd.read_csv(
