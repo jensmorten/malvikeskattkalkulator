@@ -300,7 +300,7 @@ for label, takst in [("Eigedom med låg takst (~nedre kvartil)", p25),
         "Takst-nivå": label,
         "Takst": f"{takst:,.0f} kr",
         "Skatt (dagens)": f"{skatt_dagens:,.0f} kr",
-        "Skatt (ny)":  f"{skatt_ny:,.0f} kr",
+        "Skatt (kalkulator)":  f"{skatt_ny:,.0f} kr",
         "Mogleg endring per mnd":  f"{eom:,.0f} kr"
         })
     
