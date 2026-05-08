@@ -5,7 +5,7 @@ import numpy as np
 import io
 
 st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
-st.title("🏠 Eigedomsskatt i Malvik (under arbeid for 2026 )")
+st.title("🏠 Eigedomsskatt i Malvik kommune")
 
 # --- Les data ---
 URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset.csv"
