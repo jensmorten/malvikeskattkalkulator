@@ -8,7 +8,7 @@ st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigedomsskatt i Malvik kommune")
 
 # --- Les data ---
-URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset.csv"
+URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset2.csv"
 
 def load_data(url):
     return pd.read_csv(
@@ -172,10 +172,13 @@ df.loc[df["Bunnfradrag"] != 320000, "Bunnfradrag_ny"] = df["Bunnfradrag"]
 df.loc[df["Promillesats"] == 4.0, "Promillesats_ny"] = naering_sats
 
 # 1. takst * prosent
-df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']
+#df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']
+
+df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']*df['faktor']
 
 # 2. trekk frå nytt bunnfradrag
-df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]
+#df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]
+df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]*df['faktor']
 df["Grunnlag_ny"] = df["Grunnlag_ny"].clip(lower=0)
 
 # 3. ny promillesats (i promille → /1000)

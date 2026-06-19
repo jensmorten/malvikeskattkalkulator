@@ -2,7 +2,7 @@ import pandas as pd
 import re 
 
 input_path = "Kopi av Skatteliste Offentlig Ettersyn 2026 - ingen eller delvis fritak - datafil.xlsx"   # <-- din fil
-output_path = "skatteliste_renset.csv"
+output_path = "skatteliste_renset2.csv"
 
 # --------- LES FIL ---------
 xls = pd.ExcelFile(input_path)
@@ -93,6 +93,8 @@ def clean_number(col):
 for col in ["Takst", "Bunnfradrag", "Grunnlag", "Skatt"]:
     df[col] = clean_number(df[col])
 
+
+
 # --------- KONVERTER TIL TAL ---------
 numeric_cols = [
     "Takst",
@@ -100,11 +102,14 @@ numeric_cols = [
     "Bunnfradrag",
     "Grunnlag",
     "Promillesats",
-    "Skatt"
+    "Skatt",
 ]
 
 for col in numeric_cols:
     df[col] = pd.to_numeric(df[col], errors="coerce")
+
+##faktor
+df['faktor']=(df['Bunnfradrag']/320000).clip(lower=1)
 
 # --------- (VALFRITT) SPLITT EIENDOM ---------
 # gnr/bnr/fnr/snr
