@@ -34,7 +34,7 @@ Malvik kommune
     unsafe_allow_html=True
 )
 # --- Tvungen tallkonvertering ---
-for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "Skatt"]:
+for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "Skatt", 'faktor']:
     df[col] = (
         df[col]
         .astype(str)
