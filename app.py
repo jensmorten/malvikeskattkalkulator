@@ -174,7 +174,7 @@ df.loc[df["Promillesats"] == 4.0, "Promillesats_ny"] = naering_sats
 # 1. takst * prosent
 #df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']
 
-df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']*df['faktor']
+df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100) - df['Bunnfradrag']*df['faktor']
 
 # 2. trekk frå nytt bunnfradrag
 #df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]
@@ -199,7 +199,7 @@ df["Skatt_ny"] = (
 total_skatt_ny = df["Skatt_ny"].sum()
 ##jenks konstant
 #total_skatt_ny=total_skatt_ny*1.015 ###
-total_skatt_ny=total_skatt_ny*0.997
+#total_skatt_ny=total_skatt_ny*0.997
 
 st.subheader("🔮 Kalkulaorens berekna eigedomsskatt (2026)")
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
