@@ -45,15 +45,13 @@ for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "
         .astype(float)
     )
 # --- Total skatt ---
-df["Fritak"] = df["Fritak"].astype(str).str.strip().str.lower()
-
-df_utan_fritak = df[df["Fritak"] == "ingen"]
-
-total_skatt_utan_fritak = df_utan_fritak["Skatt"].sum()
+# Alle rader, også dei med delvis fritak (§ 5 h): dei følgjer same formel,
+# og utrekninga under brukar dei same radene.
+total_skatt = df["Skatt"].sum()
 
 st.subheader("💰 Total eigedomsskatt (2026)")
 
-total_mill = round(total_skatt_utan_fritak / 1_000_000,1)
+total_mill = round(total_skatt / 1_000_000,1)
 st.metric(
     label="",
     value=f"{total_mill} mill. kr"
@@ -165,41 +163,41 @@ df["Promillesats_ny"] = df["Promillesats"]  # start med dagens sats
 
 # bolig: 1.8 ‰ → bruk bolig_sats
 df.loc[df["Promillesats"] == 1.8, "Promillesats_ny"] = bolig_sats
-df.loc[df["Bunnfradrag"] == 320000, "Bunnfradrag_ny"] = bunnfradrag_ny
-df.loc[df["Bunnfradrag"] != 320000, "Bunnfradrag_ny"] = df["Bunnfradrag"] 
 
 # næring: 4.0 ‰ → bruk næring_sats
 df.loc[df["Promillesats"] == 4.0, "Promillesats_ny"] = naering_sats
 
-# 1. takst * prosent
-#df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100)- df['Bunnfradrag']
+# Bunnfradrag i lista er alt summert over boeiningane (320 000 per sjølvstendig
+# boeining), så talet på boeiningar er Bunnfradrag / 320 000. Nytt botnfrådrag
+# gjeld per boeining, også for eigedomar med fleire boeiningar.
+df["Boeiningar"] = (df["Bunnfradrag"] / STD_BUNN).round()
+df["Bunnfradrag_ny"] = bunnfradrag_ny * df["Boeiningar"]
 
-df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100) - df['Bunnfradrag']*df['faktor']
+# 1. takst * skattenivå - bunnfradrag (gir Grunnlag i lista)
+df["Beregningsgrunnlag"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag"]
 
 # 2. trekk frå nytt bunnfradrag
-#df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]
-df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]*df['faktor']
+df["Grunnlag_ny"] = df["Takst"] * (df["Skattenivå"] / 100) - df["Bunnfradrag_ny"]
 df["Grunnlag_ny"] = df["Grunnlag_ny"].clip(lower=0)
 
 # 3. ny promillesats (i promille → /1000)
 df["Skatt_ny"] = df["Grunnlag_ny"] * (df["Promillesats_ny"] / 1000)
 
-# 4. minimum 300-regel
-df.loc[df["Skatt_ny"] < 300, "Skatt_ny"] = 0
-
-# 5. Rund av til nærmaste krone
+# 4. Rund ned til heile kroner, som i skattelista. Malvik har ingen
+#    minsteskatt: lista har 183 rader under 300 kr.
 df["Skatt_ny"] = (
-    df["Skatt_ny"]
-    .fillna(0)   
-    .replace([np.inf, -np.inf], 0)
-    .round(0)
+    np.floor(
+        df["Skatt_ny"]
+        .fillna(0)
+        .replace([np.inf, -np.inf], 0)
+        + 1e-6  # unngå at flyttal som 4644.9999999 blir runda ned ei krone
+    )
     .astype(int)
 )
 
+# Med vedtatte satsar gir dette same skatt som lista for kvar rad
+# (35 165 094 kr totalt), så det trengst ingen korreksjonskonstant.
 total_skatt_ny = df["Skatt_ny"].sum()
-##jenks konstant
-total_skatt_ny=total_skatt_ny*1.033 ###
-#total_skatt_ny=total_skatt_ny*0.997
 
 st.subheader("🔮 Kalkulaorens berekna eigedomsskatt (2026)")
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
@@ -215,21 +213,23 @@ st.metric(
 #    value=f"{kd_total_mill} mill. kr"
 #)
 
-text= "Basert på brukaren sine val for promillesats og botnfrådrag."
-if bolig_sats==1.8 and bunnfradrag_ny==320000:
+text= "Basert på brukaren sine val for promillesats og botnfrådrag. "
+if bolig_sats==1.8 and naering_sats==4.0 and bunnfradrag_ny==320000:
     text = text + "Promillesats 1.8‰ og botnfrådrag 320 000 tilsvarar vedtatt nivå i 2026"
-elif bolig_sats==2.9 and bunnfradrag_ny==1200000:
+elif bolig_sats==2.9 and naering_sats==5.0 and bunnfradrag_ny==1200000:
     text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026"
 
 st.caption(text)
 
 
-inntekt_diff = total_mill_ny - total_mill
+# Differansen blir rekna av urunda tal, så ei endring under 0.5 mill. kr
+# ikkje blir vist som "inga endring".
+inntekt_diff = (total_skatt_ny - total_skatt) / 1_000_000
 
-if round(inntekt_diff,0) > 0:
-    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med dagens situasjon (forventa 2026)**."
-elif round(inntekt_diff,0) < 0:
-    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff):.1f} millionar kr samanlikna med kommunedirektørens forslag**."
+if round(inntekt_diff,1) > 0:
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med vedtatt nivå for 2026**."
+elif round(inntekt_diff,1) < 0:
+    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff):.1f} millionar kr samanlikna med vedtatt nivå for 2026**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
     
@@ -268,7 +268,7 @@ def beregn_skatt(takst, skattenivå, bunnfradrag, promille):
     grunnlag = takst * (skattenivå / 100) - bunnfradrag
     grunnlag = max(grunnlag, 0)
     skatt = grunnlag * (promille / 1000)
-    return 0 if skatt < 300 else skatt
+    return np.floor(skatt + 1e-6)
 
 def to_mill(x):
     return f"{x/1_000_000:.1f} mill."
@@ -370,7 +370,7 @@ Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.
 </p>
 <p>
 Moglege feilkjelder som kan forklare avvik: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
-utført kan slik metode gi enkelte feil. Vidare tar den forenkla kalkulatoren ikkje omsyn til "delvis fritak" for eigedomsskatt. 
+utført kan slik metode gi enkelte feil. Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
 
 </p>
 <p>
