@@ -7,6 +7,12 @@ import io
 st.set_page_config(page_title="Eigedomsskatt i Malvik", layout="wide")
 st.title("🏠 Eigedomsskatt i Malvik kommune")
 
+# --- Budsjettår og datagrunnlag (oppdater her kvart år) ---
+BUDSJETTAAR = 2027
+DATAAAR = 2026  # skattelista frå offentleg ettersyn som er brukt som grunnlag
+KD_FORSLAG_MILL = 35.3  # kommunedirektørens anslag for eigedomsskatt i budsjettforslaget
+KD_URL = "https://pub.framsikt.net/2027/malvik/bm-2027-hp27#/generic/summary/budsum"
+
 # --- Les data ---
 URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset2.csv"
 
@@ -25,10 +31,10 @@ df=load_data(URL)
 st.markdown(
     f"""
 <div style="padding: 0.6em; border-radius: 5px; background-color: #e6ffed; border-left: 4px solid #00cc44;">
-<b></b> {len(df)} rader med data er lasta for 2026 ned frå Malvik kommune:
-<a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025", target="_blank">
-Malvik kommune
-</a>
+<b></b> {len(df)} rader med data frå skattelista for {DATAAAR} er lasta ned frå
+<a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025" target="_blank">
+offentleg ettersyn, eigedomsskatt {DATAAAR}
+</a>. Lista er grunnlaget for utrekninga for {BUDSJETTAAR}.
 </div>
 """,
     unsafe_allow_html=True
@@ -48,14 +54,24 @@ for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "
 # Alle rader, også dei med delvis fritak (§ 5 h): dei følgjer same formel,
 # og utrekninga under brukar dei same radene.
 total_skatt = df["Skatt"].sum()
-
-st.subheader("💰 Total eigedomsskatt (2026)")
-
 total_mill = round(total_skatt / 1_000_000,1)
-st.metric(
-    label="",
-    value=f"{total_mill} mill. kr"
-)
+
+kol_liste, kol_kd, kol_kalk = st.columns(3)
+
+with kol_liste:
+    st.subheader(f"💰 Skatteliste {DATAAAR} (grunnlag)")
+    st.metric(
+        label="",
+        value=f"{total_mill} mill. kr"
+    )
+
+with kol_kd:
+    st.subheader(f"💁‍♂️ Kommunedirektørens forslag ({BUDSJETTAAR})")
+    st.metric(
+        label="",
+        value=f"{KD_FORSLAG_MILL} mill. kr"
+    )
+    st.markdown(f'<a href="{KD_URL}" target="_blank">Budsjettforslaget {BUDSJETTAAR}</a>', unsafe_allow_html=True)
 
 # ============================
 #      SIDEBAR START
@@ -132,13 +148,13 @@ with st.sidebar:
 # Sliderne (alltid synlige)
 # -----------------------------------
 st.sidebar.slider(
-    "Promillesats for bolig (1.8‰ i 2026)",
+    f"Promillesats for bolig (1.8‰ i forslag {BUDSJETTAAR})",
     min_value=0.0, max_value=4.0, step=0.1,
     key="bolig_sats"
 )
 
 st.sidebar.slider(
-    "Promillesats for næring (4.0‰ i 2026)",
+    f"Promillesats for næring (4.0‰ i forslag {BUDSJETTAAR})",
     min_value=0.0, max_value=7.0, step=0.1,
     key="naering_sats"
 )
@@ -199,41 +215,43 @@ df["Skatt_ny"] = (
 # (35 165 094 kr totalt), så det trengst ingen korreksjonskonstant.
 total_skatt_ny = df["Skatt_ny"].sum()
 
-st.subheader("🔮 Kalkulaorens berekna eigedomsskatt (2026)")
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
-st.metric(
-    label="",
-    value=f"{total_mill_ny} mill. kr"
-)
 
-#st.subheader("💁‍♂️ Kommunedirektørens forslag (2027)")
-#kd_total_mill = "ikkje lagt fram enno"
-#st.metric(
-#    label="",
-#    value=f"{kd_total_mill} mill. kr"
-#)
+with kol_kalk:
+    st.subheader(f"🔮 Kalkulatorens berekna eigedomsskatt ({BUDSJETTAAR})")
+    st.metric(
+        label="",
+        value=f"{total_mill_ny} mill. kr"
+    )
 
 text= "Basert på brukaren sine val for promillesats og botnfrådrag. "
 if bolig_sats==1.8 and naering_sats==4.0 and bunnfradrag_ny==320000:
-    text = text + "Promillesats 1.8‰ og botnfrådrag 320 000 tilsvarar vedtatt nivå i 2026"
+    text = text + f"Promillesats 1.8‰ og botnfrådrag 320 000 tilsvarar kommunedirektørens forslag for {BUDSJETTAAR} (uendra frå 2026)"
 elif bolig_sats==2.9 and naering_sats==5.0 and bunnfradrag_ny==1200000:
     text = text + "Promillesats 2.9‰ og botnfrådrag 1 200 000 tilsvarar Raudts alternative budsjett for 2026"
 
 st.caption(text)
 
 
-# Differansen blir rekna av urunda tal, så ei endring under 0.5 mill. kr
-# ikkje blir vist som "inga endring".
+# Differansen blir rekna mot kalkulatoren sin eigen total ved satsane i forslaget
+# (= summen av skattelista), så samanlikninga er lik mot lik. Avrundinga til
+# 0.1 mill. kr gjer at endringar under 0.05 mill. kr blir vist som "inga endring".
 inntekt_diff = (total_skatt_ny - total_skatt) / 1_000_000
 
 if round(inntekt_diff,1) > 0:
-    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med vedtatt nivå for 2026**."
+    tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med kommunedirektørens forslag for {BUDSJETTAAR}**."
 elif round(inntekt_diff,1) < 0:
-    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff):.1f} millionar kr samanlikna med vedtatt nivå for 2026**."
+    tekst = f"📉 Den valde endringa i satsar gir kutt i inntekter på **{abs(inntekt_diff):.1f} millionar kr samanlikna med kommunedirektørens forslag for {BUDSJETTAAR}**."
 else:
     tekst = "⚖️ Inga endring i inntektene."
-    
+
 st.markdown(f"### {tekst}")
+
+st.caption(
+    f"Endringa er rekna mot kalkulatoren sin total ved satsane i forslaget ({total_mill} mill. kr). "
+    f"Kommunedirektøren anslår {KD_FORSLAG_MILL} mill. kr for {BUDSJETTAAR}. Skilnaden kjem frå grunnlaget i budsjettet "
+    f"(nye eigedomar, endringar i lista og anslag), ikkje frå utrekninga per eigedom."
+)
 
 #st.subheader("🔍 Debug – topp 10 etter skatt")
 
@@ -302,7 +320,7 @@ for label, takst in [("Eigedom med låg takst (~nedre kvartil)", p25),
     rows.append({
         "Takst-nivå": label,
         "Takst": f"{takst:,.0f} kr",
-        "Skatt (dagens)": f"{skatt_dagens:,.0f} kr",
+        f"Skatt (forslag {BUDSJETTAAR})": f"{skatt_dagens:,.0f} kr",
         "Skatt (kalkulator)":  f"{skatt_ny:,.0f} kr",
         "Mogleg endring per mnd":  f"{eom:,.0f} kr"
         })
@@ -354,15 +372,17 @@ def farge_neg_pos(val):
 st.dataframe(df_sim, hide_index=True, use_container_width=False)
 
 
-st.sidebar.markdown("""
+st.sidebar.markdown(f"""
 <hr>
 <p>
-ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigedomsskatten i Malvik kommune, 
-både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen. 
+ℹ️ Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigedomsskatten i Malvik kommune,
+både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen.
 </p>
 <p>
-Kalkulatoren bruker data henta frå <a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025">
-offentleg ettersyn, eiendomsskatt 2026 i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett. 
+Kalkulatoren samanliknar med <a href="{KD_URL}">kommunedirektørens budsjettforslag for {BUDSJETTAAR}</a>,
+som held fram med same satsar som i 2026. Skattelista for {BUDSJETTAAR} er ikkje lagt ut enno, så utrekninga
+bruker data henta frå <a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025">
+offentleg ettersyn, eigedomsskatt {DATAAAR} i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett.
 </p>
 <p>
 <a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning input der kommunedirektøren har publisert sine berekningar. Relativ diffeanse for desse punkt-sjekkane mellom -0.3% og 1.3%. 

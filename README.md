@@ -5,7 +5,7 @@ https://malvikeskattkalkulator.streamlit.app/
 
 Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigedomsskatten i Malvik kommune, både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen.
 
-Kalkulatoren bruker data henta frå offentleg ettersyn, eiendomsskatt 2026 i Malvik. All data som er brukt ligg opent tilgjengeleg på nett.
+Kalkulatoren er no sett opp for budsjettet for 2027. <a href="https://pub.framsikt.net/2027/malvik/bm-2027-hp27#/generic/summary/budsum">Kommunedirektørens forslag for 2027</a> held fram med same satsar som i 2026 (1.8‰ bolig, 4.0‰ næring, botnfrådrag 320 000) og anslår eigedomsskatten til 35.3 mill. kr. Skattelista for 2027 blir ikkje lagt ut før offentleg ettersyn i 2027, så kalkulatoren bruker framleis data henta frå offentleg ettersyn, eigedomsskatt 2026 i Malvik. All data som er brukt ligg opent tilgjengeleg på nett. Budsjettår, dataår og kommunedirektørens anslag er samla som konstantar øvst i `app.py`.
 
 Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er utført kan slik metode gi enkelte feil. Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
 
@@ -15,7 +15,9 @@ Ta gjerne kontakt med jens.morten.nilsen@gmail.com for spørsmål eller kommenta
 
 Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil understreke at kalkulatoren kan brukast av alle, og den reknar like bra utansett som skatten går opp eller ned.
 
-Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.net/2026/malvik/bm-2026-hop_2026_2029#/generic/summary/introduction/ab2c2b22-5314-4136-90c7-3d4fd3e39a93-cn">  kommunediretørens beregning: </a>
+Validering mot budsjettforslaget for 2027: ved uendra satsar gir kalkulatoren 35.2 mill. kr (summen av skattelista for 2026), mot kommunedirektørens anslag på 35.3 mill. kr. Differansen er 0.1 mill. kr (om lag 0.4 %).
+
+Validering av kalkulatoren ved sammenligning med (budsjettet for 2026)<a href="https://pub.framsikt.net/2026/malvik/bm-2026-hop_2026_2029#/generic/summary/introduction/ab2c2b22-5314-4136-90c7-3d4fd3e39a93-cn">  kommunediretørens beregning: </a>
 
 
 |                          | test 1 | test 2 | test 3 | test 4 | test 5 | test 6 |
