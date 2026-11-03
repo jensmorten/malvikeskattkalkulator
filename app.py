@@ -12,6 +12,7 @@ BUDSJETTAAR = 2027
 DATAAAR = 2026  # skattelista frå offentleg ettersyn som er brukt som grunnlag
 KD_FORSLAG_MILL = 35.3  # kommunedirektørens anslag for eigedomsskatt i budsjettforslaget
 KD_URL = "https://pub.framsikt.net/2027/malvik/bm-2027-hp27#/generic/summary/budsum"
+MINSTESKATT = 300  # skatt under dette blir ikkje kravd inn
 
 # --- Les data ---
 URL = "https://raw.githubusercontent.com/jensmorten/malvikeskattkalkulator/refs/heads/main/data/2026/skatteliste_renset2.csv"
@@ -50,12 +51,15 @@ for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "
     )
 # --- Total skatt ---
 # Alle rader, også dei med delvis fritak (§ 5 h): dei følgjer same formel,
-# og utrekninga under brukar dei same radene.
-total_skatt = df["Skatt"].sum()
+# og utrekninga under brukar dei same radene. Lista viser utrekna skatt også
+# under MINSTESKATT, men den blir ikkje kravd inn og er difor ikkje med.
+total_skatt = df.loc[df["Skatt"] >= MINSTESKATT, "Skatt"].sum()
 
 # Skattelista for DATAAAR summerer seg til litt mindre enn kommunedirektørens anslag
-# for BUDSJETTAAR (nye eigedomar, endringar i lista o.l.). Totalane blir skalerte
-# med denne faktoren (≈ 1.004 for 2027), så kalkulatoren gir anslaget ved satsane i forslaget.
+# for BUDSJETTAAR. Skilnaden kjem truleg frå nye eigedomar og endringar i lista,
+# ikkje prisvekst: takstane ligg fast, og 1.027 (prisvekst 2027) ville gitt 36.1 mill.
+# Totalane blir skalerte med denne faktoren (≈ 1.0045 for 2027), så kalkulatoren
+# gir anslaget ved satsane i forslaget.
 JUSTERING = KD_FORSLAG_MILL * 1_000_000 / total_skatt
 
 kol_kd, kol_kalk = st.columns(2)
@@ -194,8 +198,7 @@ df["Grunnlag_ny"] = df["Grunnlag_ny"].clip(lower=0)
 # 3. ny promillesats (i promille → /1000)
 df["Skatt_ny"] = df["Grunnlag_ny"] * (df["Promillesats_ny"] / 1000)
 
-# 4. Rund ned til heile kroner, som i skattelista. Malvik har ingen
-#    minsteskatt: lista har 183 rader under 300 kr.
+# 4. Rund ned til heile kroner, som i skattelista.
 df["Skatt_ny"] = (
     np.floor(
         df["Skatt_ny"]
@@ -206,8 +209,11 @@ df["Skatt_ny"] = (
     .astype(int)
 )
 
-# Med satsane i forslaget gir dette same skatt som lista for kvar rad
-# (35 165 094 kr totalt). Totalen blir så skalert til budsjettanslaget.
+# 5. Skatt under MINSTESKATT blir ikkje kravd inn (183 rader i lista for 2026).
+df.loc[df["Skatt_ny"] < MINSTESKATT, "Skatt_ny"] = 0
+
+# Med satsane i forslaget gir dette same skatt som lista for kvar rad som
+# blir kravd inn (35 140 425 kr totalt). Totalen blir så skalert til budsjettanslaget.
 total_skatt_ny = df["Skatt_ny"].sum() * JUSTERING
 
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
@@ -243,8 +249,9 @@ else:
 st.markdown(f"### {tekst}")
 
 st.caption(
-    f"Skattelista for {DATAAAR} summerer seg til {total_skatt / 1_000_000:.1f} mill. kr. For å treffe kommunedirektørens "
-    f"anslag for {BUDSJETTAAR} er totalane skalerte med {JUSTERING:.3f}. Tabellen under viser skatt per eigedom utan skalering."
+    f"Skattelista for {DATAAAR} summerer seg til {total_skatt / 1_000_000:.1f} mill. kr (skatt under {MINSTESKATT} kr blir ikkje kravd inn). "
+    f"For å treffe kommunedirektørens anslag for {BUDSJETTAAR} er totalane skalerte med {JUSTERING:.4f}, "
+    f"som dekkjer nye eigedomar og endringar i lista. Tabellen under viser skatt per eigedom utan skalering."
 )
 
 #st.subheader("🔍 Debug – topp 10 etter skatt")
@@ -279,8 +286,8 @@ p99 = 10000000 ###3df["Takst"].quantile(0.985)
 def beregn_skatt(takst, skattenivå, bunnfradrag, promille):
     grunnlag = takst * (skattenivå / 100) - bunnfradrag
     grunnlag = max(grunnlag, 0)
-    skatt = grunnlag * (promille / 1000)
-    return np.floor(skatt + 1e-6)
+    skatt = np.floor(grunnlag * (promille / 1000) + 1e-6)
+    return skatt if skatt >= MINSTESKATT else 0
 
 def to_mill(x):
     return f"{x/1_000_000:.1f} mill."
@@ -378,7 +385,7 @@ som held fram med same satsar som i 2026. Skattelista for {BUDSJETTAAR} er ikkje
 bruker skattelista for {DATAAAR} frå offentleg ettersyn i Malvik kommune.
 </p>
 <p>
-<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning med berekningar kommunedirektøren har publisert. Totalane er skalerte med ein faktor ({JUSTERING:.3f}) slik at kalkulatoren treffer kommunedirektørens anslag for {BUDSJETTAAR} ved satsane i forslaget.
+<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning med berekningar kommunedirektøren har publisert. Totalane er skalerte med ein faktor ({JUSTERING:.4f}) slik at kalkulatoren treffer kommunedirektørens anslag for {BUDSJETTAAR} ved satsane i forslaget.
 Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.               
 </p>
 <p>
