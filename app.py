@@ -385,13 +385,14 @@ som held fram med same satsar som i 2026. Skattelista for {BUDSJETTAAR} er ikkje
 bruker skattelista for {DATAAAR} frå offentleg ettersyn i Malvik kommune.
 </p>
 <p>
-<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning med berekningar kommunedirektøren har publisert. Totalane er skalerte med ein faktor ({JUSTERING:.4f}) slik at kalkulatoren treffer kommunedirektørens anslag for {BUDSJETTAAR} ved satsane i forslaget.
-Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.               
+<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning med berekningar kommunedirektøren publiserte for tidlegare år, med same utrekningsmetode.
+Desse tala har inga direkte relevans for tala i år, men avvika gir ein generell peikepinn på kor nøyaktig kalkulatoren kan forventast å vere.
+Totalane er skalerte med ein faktor ({JUSTERING:.4f}) slik at kalkulatoren treffer kommunedirektørens anslag for {BUDSJETTAAR} ved satsane i forslaget.
+Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.
 </p>
 <p>
-Moglege feilkjelder som kan forklare avvik: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er 
-utført kan slik metode gi enkelte feil. Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
-
+Moglege feilkjelder som kan forklare avvik: utrekninga for {BUDSJETTAAR} byggjer på skattelista for {DATAAAR}, så nye eigedomar og endringar
+i lista er berre med gjennom skaleringa. Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
 </p>
 <p>
 Ta gjerne kontakt med <a href="mailto:jens.morten.nilsen@gmail.com">jens.morten.nilsen@gmail.com</a> for spørsmål eller kommentarar.  
