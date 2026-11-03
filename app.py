@@ -31,10 +31,8 @@ df=load_data(URL)
 st.markdown(
     f"""
 <div style="padding: 0.6em; border-radius: 5px; background-color: #e6ffed; border-left: 4px solid #00cc44;">
-<b></b> {len(df)} rader med data frå skattelista for {DATAAAR} er lasta ned frå
-<a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025" target="_blank">
-offentleg ettersyn, eigedomsskatt {DATAAAR}
-</a>. Lista er grunnlaget for utrekninga for {BUDSJETTAAR}.
+<b></b> {len(df)} rader med data frå skattelista for {DATAAAR} (offentleg ettersyn i Malvik kommune) er lasta.
+Lista er grunnlaget for utrekninga for {BUDSJETTAAR}.
 </div>
 """,
     unsafe_allow_html=True
@@ -54,16 +52,13 @@ for col in ["Takst", "Skattenivå", "Bunnfradrag", "Grunnlag", "Promillesats", "
 # Alle rader, også dei med delvis fritak (§ 5 h): dei følgjer same formel,
 # og utrekninga under brukar dei same radene.
 total_skatt = df["Skatt"].sum()
-total_mill = round(total_skatt / 1_000_000,1)
 
-kol_liste, kol_kd, kol_kalk = st.columns(3)
+# Skattelista for DATAAAR summerer seg til litt mindre enn kommunedirektørens anslag
+# for BUDSJETTAAR (nye eigedomar, endringar i lista o.l.). Totalane blir skalerte
+# med denne faktoren (≈ 1.004 for 2027), så kalkulatoren gir anslaget ved satsane i forslaget.
+JUSTERING = KD_FORSLAG_MILL * 1_000_000 / total_skatt
 
-with kol_liste:
-    st.subheader(f"💰 Skatteliste {DATAAAR} (grunnlag)")
-    st.metric(
-        label="",
-        value=f"{total_mill} mill. kr"
-    )
+kol_kd, kol_kalk = st.columns(2)
 
 with kol_kd:
     st.subheader(f"💁‍♂️ Kommunedirektørens forslag ({BUDSJETTAAR})")
@@ -211,9 +206,9 @@ df["Skatt_ny"] = (
     .astype(int)
 )
 
-# Med vedtatte satsar gir dette same skatt som lista for kvar rad
-# (35 165 094 kr totalt), så det trengst ingen korreksjonskonstant.
-total_skatt_ny = df["Skatt_ny"].sum()
+# Med satsane i forslaget gir dette same skatt som lista for kvar rad
+# (35 165 094 kr totalt). Totalen blir så skalert til budsjettanslaget.
+total_skatt_ny = df["Skatt_ny"].sum() * JUSTERING
 
 total_mill_ny = round(total_skatt_ny / 1_000_000,1)
 
@@ -233,10 +228,10 @@ elif bolig_sats==2.9 and naering_sats==5.0 and bunnfradrag_ny==1200000:
 st.caption(text)
 
 
-# Differansen blir rekna mot kalkulatoren sin eigen total ved satsane i forslaget
-# (= summen av skattelista), så samanlikninga er lik mot lik. Avrundinga til
-# 0.1 mill. kr gjer at endringar under 0.05 mill. kr blir vist som "inga endring".
-inntekt_diff = (total_skatt_ny - total_skatt) / 1_000_000
+# Ved satsane i forslaget er total_skatt_ny lik anslaget, så differansen er
+# endringa mot forslaget. Avrundinga til 0.1 mill. kr gjer at endringar under
+# 0.05 mill. kr blir vist som "inga endring".
+inntekt_diff = total_skatt_ny / 1_000_000 - KD_FORSLAG_MILL
 
 if round(inntekt_diff,1) > 0:
     tekst = f"📈 Den valde endringa i satsar gir auke i inntekter på **{inntekt_diff:.1f} millionar kr samanlikna med kommunedirektørens forslag for {BUDSJETTAAR}**."
@@ -248,9 +243,8 @@ else:
 st.markdown(f"### {tekst}")
 
 st.caption(
-    f"Endringa er rekna mot kalkulatoren sin total ved satsane i forslaget ({total_mill} mill. kr). "
-    f"Kommunedirektøren anslår {KD_FORSLAG_MILL} mill. kr for {BUDSJETTAAR}. Skilnaden kjem frå grunnlaget i budsjettet "
-    f"(nye eigedomar, endringar i lista og anslag), ikkje frå utrekninga per eigedom."
+    f"Skattelista for {DATAAAR} summerer seg til {total_skatt / 1_000_000:.1f} mill. kr. For å treffe kommunedirektørens "
+    f"anslag for {BUDSJETTAAR} er totalane skalerte med {JUSTERING:.3f}. Tabellen under viser skatt per eigedom utan skalering."
 )
 
 #st.subheader("🔍 Debug – topp 10 etter skatt")
@@ -381,11 +375,10 @@ både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og bot
 <p>
 Kalkulatoren samanliknar med <a href="{KD_URL}">kommunedirektørens budsjettforslag for {BUDSJETTAAR}</a>,
 som held fram med same satsar som i 2026. Skattelista for {BUDSJETTAAR} er ikkje lagt ut enno, så utrekninga
-bruker data henta frå <a href="https://www.malvik.kommune.no/offentlig-ettersyn-eiendomsskatt-2025">
-offentleg ettersyn, eigedomsskatt {DATAAAR} i Malvik</a>. All data som er brukt ligg opent tilgjengeleg på nett.
+bruker skattelista for {DATAAAR} frå offentleg ettersyn i Malvik kommune.
 </p>
 <p>
-<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning input der kommunedirektøren har publisert sine berekningar. Relativ diffeanse for desse punkt-sjekkane mellom -0.3% og 1.3%. 
+<a href=" https://github.com/jensmorten/malvikeskattkalkulator/blob/main/README.md"> Validering av kalkulatoren </a> er utført ved samanlikning med berekningar kommunedirektøren har publisert. Totalane er skalerte med ein faktor ({JUSTERING:.3f}) slik at kalkulatoren treffer kommunedirektørens anslag for {BUDSJETTAAR} ved satsane i forslaget.
 Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk.               
 </p>
 <p>
