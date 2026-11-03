@@ -5,17 +5,23 @@ https://malvikeskattkalkulator.streamlit.app/
 
 Dette er ein enkel kalkulator som reknar ut konsekvensen av å endre eigedomsskatten i Malvik kommune, både for kommunebudsjettet og huseigarar. Eksperimenter med promillesats og botnfrådrag og sjå konsekvensen.
 
-Kalkulatoren bruker data henta frå offentleg ettersyn, eiendomsskatt 2026 i Malvik. All data som er brukt ligg opent tilgjengeleg på nett.
+Kalkulatoren er no sett opp for budsjettet for 2027. <a href="https://pub.framsikt.net/2027/malvik/bm-2027-hp27#/generic/summary/budsum">Kommunedirektørens forslag for 2027</a> held fram med same satsar som i 2026 (1.8‰ bolig, 4.0‰ næring, botnfrådrag 320 000) og anslår eigedomsskatten til 35.3 mill. kr. Skattelista for 2027 blir ikkje lagt ut før offentleg ettersyn i 2027, så kalkulatoren bruker framleis skattelista for 2026 frå offentleg ettersyn i Malvik kommune. Budsjettår, dataår og kommunedirektørens anslag er samla som konstantar øvst i `app.py`.
 
-Moglege feilkjelder: data er henta inn frå eit PDF-dokument og konvertert til tabellformat og sjølv om manuell kontroll av data er utført kan slik metode gi enkelte feil. Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
+Moglege feilkjelder: utrekninga for 2027 byggjer på skattelista for 2026, så nye eigedomar og endringar i lista er berre med gjennom skaleringa (sjå under). Eigedomar med delvis fritak er tekne med slik dei står i skattelista.
 
-Utrekninga per rad er `floor(max(takst × skattenivå − botnfrådrag × boeiningar, 0) × promille / 1000)`, der talet på boeiningar er Bunnfradrag i lista delt på 320 000. Med vedtatte satsar for 2026 (1.8‰ bolig, 4.0‰ næring, botnfrådrag 320 000) gir formelen nøyaktig skatten i lista for alle 6 498 radene, 35 165 094 kr totalt.
+Utrekninga per rad er `floor(max(takst × skattenivå − botnfrådrag × boeiningar, 0) × promille / 1000)`, der talet på boeiningar er Bunnfradrag i lista delt på 320 000. Med vedtatte satsar for 2026 (1.8‰ bolig, 4.0‰ næring, botnfrådrag 320 000) gir formelen nøyaktig skatten i lista for alle 6 498 radene, 35 165 094 kr totalt. Lista viser utrekna skatt også når han er under 300 kr, men slik skatt blir ikkje kravd inn. Kalkulatoren set difor skatt under 300 kr til 0 (183 rader, 24 669 kr i 2026-lista), og grunnlaget blir 35 140 425 kr.
 
 Ta gjerne kontakt med jens.morten.nilsen@gmail.com for spørsmål eller kommentarar.
 
 Utviklaren er kommunestyrerepresentant for Raudt i Malvik men vil understreke at kalkulatoren kan brukast av alle, og den reknar like bra utansett som skatten går opp eller ned.
 
-Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.net/2026/malvik/bm-2026-hop_2026_2029#/generic/summary/introduction/ab2c2b22-5314-4136-90c7-3d4fd3e39a93-cn">  kommunediretørens beregning: </a>
+Skalering mot budsjettforslaget for 2027: skattelista for 2026 summerer seg til 35.14 mill. kr utan skatt under 300 kr, mot kommunedirektørens anslag på 35.3 mill. kr for 2027. Totalane i kalkulatoren blir difor skalerte med `35.3 / 35.14 ≈ 1.0045` (`JUSTERING` i `app.py`). Faktoren dekkjer truleg nye eigedomar og endringar i lista, ikkje prisvekst: takstane ligg fast, og prisveksten på 2.7 % ville gitt 36.1 mill. kr. Med skaleringa gir kalkulatoren 35.3 mill. kr ved satsane i forslaget. Faktoren blir rekna ut frå konstantane, så han følgjer med når anslaget blir oppdatert. Skatt per eigedom (tabellen over typiske eigedomar) blir ikkje skalert.
+
+## Validering mot tidlegare år
+
+Valideringa under er gjort mot berekningar kommunedirektøren publiserte for budsjetta for 2025 og 2026, med same utrekningsmetode som kalkulatoren bruker i dag. Tala har inga direkte relevans for tala for 2027, men bortsett frå dei forklarte avvika gir dei ein generell peikepinn på kor nøyaktig kalkulatoren kan forventast å vere. Kalkulatortala i tabellane er rekna utan 300 kr-grensa og skaleringa. Til saman flyttar desse to totalen med under 0.2 mill. kr ved vedtatte satsar.
+
+Samanlikning med kommunedirektørens berekning i <a href="https://pub.framsikt.net/2026/malvik/bm-2026-hop_2026_2029#/generic/summary/introduction/ab2c2b22-5314-4136-90c7-3d4fd3e39a93-cn">budsjettet for 2026</a>:
 
 
 |                          | test 1 | test 2 | test 3 | test 4 | test 5 | test 6 |
@@ -29,7 +35,7 @@ Validering av kalkulatoren ved sammenligning med<a href="https://pub.framsikt.ne
 
 Kalkulatoren reknar no utan korreksjonskonstant (tidlegare 1.033) og gir same total som skattelista ved vedtatte satsar. Kommunedirektørens tal for vedtatt nivå (35.8 mill. kr) er 0.6 mill. kr høgare enn summen av skattelista (35.17 mill. kr), så skilnaden kjem frå grunnlaget i budsjettet og ikkje frå utrekninga per eigedom. Brukaren må sjølv ta stilling til om avviket er akseptabelt for aktuell bruk. 
 
-Validering av effekten av bunnfradrag er utført med  <a href="https://pub.framsikt.net/2025/malvik/bm-2025-handlings-_og_%C3%B8konomiplan_2025-2028#/generic/summary/introduction/ead26f38-ec6f-44b7-b320-bececd7a43de-cn"> svar på spørsmål i 2025</a>:
+Validering av effekten av bunnfradrag er gjort mot kommunedirektørens <a href="https://pub.framsikt.net/2025/malvik/bm-2025-handlings-_og_%C3%B8konomiplan_2025-2028#/generic/summary/introduction/ead26f38-ec6f-44b7-b320-bececd7a43de-cn">svar på spørsmål i budsjettet for 2025</a>:
 
 | Bunnfradrag  (1.9 promille på bolig, 4 promille næring)       | Differanse, kommunedirektørens berekning | Differanse, kalkulator |
 |---------------------|----------------|-------------------------|
